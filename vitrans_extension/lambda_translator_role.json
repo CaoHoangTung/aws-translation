@@ -1,0 +1,27 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "lambda_translator",
+        "RoleId": "AROA3JUMPEZKIWMZUIJRO",
+        "Arn": "arn:aws:iam::776609932884:role/lambda_translator",
+        "CreateDate": "2022-05-26T11:28:35+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "lambda.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "Description": "Allows Lambda functions to call AWS services on your behalf.",
+        "MaxSessionDuration": 3600,
+        "RoleLastUsed": {
+            "LastUsedDate": "2022-05-27T04:13:14+00:00",
+            "Region": "ap-southeast-1"
+        }
+    }
+}
