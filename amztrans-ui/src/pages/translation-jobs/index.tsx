@@ -6,34 +6,16 @@ import Header from "@awsui/components-react/header";
 import Container from "@awsui/components-react/container";
 import Cards from "@awsui/components-react/cards";
 import Link from "@awsui/components-react/link";
+import DefaultAppLayout from "../Layout";
+import TranslationJobs from "../../components/TranslationJobs";
 
-const UploadPage = () => {
+const TranslationJobsPage = () => {
     return (
-        <AppLayout
-            navigation={
-                <Container header={<Header variant="h2">Translate</Header>}>
-                <SpaceBetween>
-                    <Cards
-                    cardDefinition={{
-                        header: <p>Cards header</p>,
-                        sections: [{
-                        id: "id",
-                        content: "card content",
-                        header: "card header",
-                        width: 100
-                        }]
-                    }}
-                    />
-                    <Link href="/upload">File upload</Link>
-                    <Link href="/jobs">Translation jobs</Link>
-                </SpaceBetween>
-                </Container>
-            }
-            tools={<p>Tools</p>}
+        <DefaultAppLayout
             content={
-                FileTranslationForm()
+                TranslationJobs()
             }
         />
     )
 }
-export default UploadPage;
+export default TranslationJobsPage;

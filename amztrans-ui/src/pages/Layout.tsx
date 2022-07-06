@@ -1,35 +1,60 @@
 import React from "react";
 import AppLayout from "@awsui/components-react/app-layout";
-import FileTranslationForm from "../../components/FileTranslationForm";
-import SpaceBetween from "@awsui/components-react/space-between";
 import Header from "@awsui/components-react/header";
 import Container from "@awsui/components-react/container";
-import Cards from "@awsui/components-react/cards";
-import Link from "@awsui/components-react/link";
+import { Button, Link, SideNavigation } from "@awsui/components-react";
+
+const Tools = () => {
+    return (
+        <>
+            <Container header={<Header variant="h2">Upload and translate your document</Header>}>
+                <Button 
+                    variant="link"
+                    iconName="external"
+                    target="blank"
+                    href="https://github.com/CaoHoangTung/aws-translation/"
+                >
+                    Github repository
+                </Button>
+            </Container>
+        </>
+    )
+}
+
+const Navigation = () => {
+    const currentUrl = window.location.pathname;
+    const activeHref = currentUrl.split("/").slice(0, 2).join("/");
+
+    return (
+        <>
+            <SideNavigation 
+                activeHref={activeHref}
+                header={{
+                    "text": "AMZ Trans",
+                    "href": "/"
+                }}
+                items={[
+                    {
+                        type: "link",
+                        text: "Upload files",
+                        href: "/upload",
+                    },
+                    {
+                        type: "link",
+                        text: "Translation results",
+                        href: "/result",
+                    }
+                ]}
+            />
+        </>
+    )
+}
 
 const DefaultAppLayout = ({ content }) => {
     return (
         <AppLayout
-            navigation={
-                <Container header={<Header variant="h2">Translate</Header>}>
-                <SpaceBetween>
-                    <Cards
-                    cardDefinition={{
-                        header: <p>Cards header</p>,
-                        sections: [{
-                        id: "id",
-                        content: "card content",
-                        header: "card header",
-                        width: 100
-                        }]
-                    }}
-                    />
-                    <Link href="/upload">File upload</Link>
-                    <Link href="/jobs">Translation jobs</Link>
-                </SpaceBetween>
-                </Container>
-            }
-            tools={<p>Tools</p>}
+            navigation={Navigation()}
+            tools={Tools()}
             content={content}
         />
     )

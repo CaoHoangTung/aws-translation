@@ -16,7 +16,8 @@ export default function App() {
         <Route path="/">
           <Route index element={<UploadPage />} />
           <Route path="upload" element={<UploadPage />} />
-          <Route path="jobs">
+          <Route path="result" >
+            <Route index element={<TranslationJobs />} />
             <Route path=":jobId" element={<TranslationJob />} />
           </Route>
           {/* <Route
@@ -28,16 +29,4 @@ export default function App() {
       </Routes>
     </BrowserRouter>
   );
-}
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }

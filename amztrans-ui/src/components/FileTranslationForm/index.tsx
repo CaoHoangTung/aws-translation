@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Form from "@awsui/components-react/form";
 import FormField from "@awsui/components-react/form-field";
 import Input from "@awsui/components-react/input";
@@ -9,9 +9,10 @@ import SpaceBetween from "@awsui/components-react/space-between";
 import Button from "@awsui/components-react/button";
 import ProgressBar from "@awsui/components-react/progress-bar";
 import StatusIndicator from "@awsui/components-react/status-indicator";
-import { SUPPORT_LANGUAGES, DEFAULT_SOURCE_LANGUAGE, DEFAULT_TARGET_LANGUAGE } from "../../assets/config";
+import { SUPPORT_LANGUAGES, DEFAULT_SOURCE_LANGUAGE, DEFAULT_TARGET_LANGUAGE, SUPPORT_FILETYPES } from "../../assets/config";
 import { createTranslationJob, listAlbums, uploadFile } from "../../utils/s3utils";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "@awsui/components-react";
 
 const FileTranslationForm = () => {
   const navigate = useNavigate();
@@ -25,7 +26,8 @@ const FileTranslationForm = () => {
     "value": DEFAULT_TARGET_LANGUAGE
   });
 
-  const [jobName, setJobName] = useState("");
+  const [fileType, setFileType] = useState(SUPPORT_FILETYPES[0]);
+
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const [filesAreUploading, setFilesAreUploading] = useState(false);
@@ -40,7 +42,9 @@ const FileTranslationForm = () => {
     console.log("SELECT", files);
   };
 
-  const submissionHandler = async () => {
+
+
+  const submissionHandler = useCallback(async (increase) => {
     setFilesAreUploading(true);
     console.log("Submitting");
     console.log("Source", sourceLang);
@@ -49,22 +53,28 @@ const FileTranslationForm = () => {
 
     const randomElement = (Math.random() + 1).toString(36).substring(7);
     const today = (new Date()).toISOString().substring(0,10);
-    const bucketKey = `public/${today}/${sourceLang.value}2${targetLang.value}-${jobName}-${randomElement}`;
-    
-    for (let file of selectedFiles) {
-      await uploadFile(bucketKey, file);
-      setUploadedFilesCount(uploadedFilesCount+1);
+    const bucketKey = `${today}/${sourceLang.value}2${targetLang.value}-${randomElement}`;
+
+    const uploadPromises = [];
+    for (let idx in selectedFiles) {
+      idx = parseInt(idx);
+      console.log(idx, typeof(idx));
+      console.log(selectedFiles[idx]);
+      let file = selectedFiles[idx];
+      const uploadPromise = await uploadFile(bucketKey, file)
+      console.log("Uploaded", idx+1);
+      setUploadedFilesCount(idx+1);
+      uploadPromises.push(uploadPromise);
     }
     setUploadId(bucketKey);
     setFilesAreUploading(false);
-  };
+  }, [selectedFiles, sourceLang, targetLang]);
 
   const resetUpload = () => {
     setUploadId("");
     setSelectedFiles([]);
     setUploadedFilesCount(0);
   }
-
 
   return (
     <Form
@@ -78,14 +88,14 @@ const FileTranslationForm = () => {
             onClick={() => {
               setTranslationJobIsCreating(true);
               createTranslationJob(
-                jobName, 
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                uploadId, 
+                fileType.value,
                 sourceLang.value, 
                 targetLang.value, 
                 uploadId
               ).then(response => {
                 console.log(response);
-                navigate(`/jobs/${response?.data?.response.JobId}`);
+                navigate(`/result/${response?.data?.response.JobId}`);
               })
               .catch(error => {
                 console.log(error);
@@ -107,9 +117,6 @@ const FileTranslationForm = () => {
     >
       <Container header={<Header variant="h2">Upload and translate your document</Header>}>
         <SpaceBetween direction="vertical" size="l">
-          <FormField label="Job name" description="Name for translation job">
-            <Input value={jobName} onChange={(event) => setJobName(event.detail.value)} />
-          </FormField>
           <FormField label="Source language" errorText={!sourceLang && "Please select a value"}>
             <Select
               options={SUPPORT_LANGUAGES.map((lang: string) => ({
@@ -132,27 +139,47 @@ const FileTranslationForm = () => {
               selectedAriaLabel="selected"
             />
           </FormField>
+          <FormField label="File type" errorText={!targetLang && "Please select a value"}>
+            <Select
+              options={SUPPORT_FILETYPES}
+              selectedOption={fileType}
+              onChange={(event) => setFileType(event.detail.selectedOption)}
+              selectedAriaLabel="selected"
+            />
+          </FormField>
 
           {!uploadId ? (
             <SpaceBetween>
               <FormField errorText={!targetLang && "Please select a value"}>
-                <Button iconName="add-plus">
-                  <label htmlFor="files">Select multiple files</label>
-                  <input id="files" style={{display: "none"}} type="file" multiple name="files" onChange={selectHandler} />
+                <Button>
+                    <label htmlFor="files" style={{cursor: "pointer", width: "100%", left: 0}}>
+                        <div style={{width: "100%"}}>
+                          <input 
+                            id="files" 
+                            name="files" 
+                            type="file"
+                            accept={fileType.value}
+                            style={{display: "none"}} 
+                            multiple 
+                            onChange={selectHandler} />
+                          <Icon name="upload" /> Select multiple files
+                        </div>
+                    </label>
                 </Button>
+                
                 {selectedFiles.length > 0 ? (
                       <div>
                         <p>
-                          {selectedFiles.length} files selected 
+                          {selectedFiles.length} files selected <span></span>
                           <Button iconName="close" onClick={() => setSelectedFiles([])}></Button>
                         </p>
-                        {!!jobName && (
-                          <Button disabled={filesAreUploading} variant="primary" onClick={submissionHandler}>Upload</Button>
+                        {selectedFiles.length >= 0 && (
+                          <Button disabled={filesAreUploading} variant="primary" onClick={() => submissionHandler()}>Upload</Button>
                         )}
                       </div>
                     ) : (
                       <>
-                        <p>Select files to upload</p>
+                        <p></p>
                       </>
                     )}
               </FormField>
@@ -162,17 +189,21 @@ const FileTranslationForm = () => {
               <FormField label="S3 input path">
                 <Input disabled value={uploadId} />
               </FormField>
-              <Button iconName="close" onClick={() => resetUpload()}></Button>
+              <FormField>
+                <Button iconName="close" onClick={() => resetUpload()}></Button>
+              </FormField>
             </SpaceBetween>
           )}
 
           {!!filesAreUploading && (
             <>
-              <ProgressBar 
-                description={`(${uploadedFilesCount+1}/${selectedFiles.length}) Uploading ${selectedFiles[uploadedFilesCount].name} `} 
-                value={(uploadedFilesCount+1) / selectedFiles.length * 100}
-              />
               <StatusIndicator type="loading" />
+              <ProgressBar 
+                description={
+                  `(${uploadedFilesCount}/${selectedFiles.length})` + 
+                  ((uploadedFilesCount < selectedFiles.length) ? `Uploading ${selectedFiles[uploadedFilesCount].name}` : "")} 
+                value={uploadedFilesCount / selectedFiles.length * 100}
+              />
             </>
           )}
         </SpaceBetween>
