@@ -11,4 +11,7 @@ git clone https://github.com/CaoHoangTung/aws-translation
 cd aws-translation/amztrans-ui
 npm install
 npm run build
-mv build/* /var/www/html/
+
+sudo npm i -g serve
+
+sudo serve -s ./build

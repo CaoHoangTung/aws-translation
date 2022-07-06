@@ -20,10 +20,10 @@ export default function App() {
             <Route index element={<TranslationJobs />} />
             <Route path=":jobId" element={<TranslationJob />} />
           </Route>
-          {/* <Route
+          <Route
               path="*"
               element={<Navigate to="/" replace />}
-          /> */}
+          />
         </Route>
 
       </Routes>
