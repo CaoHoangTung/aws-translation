@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Form from "@awsui/components-react/form";
 import FormField from "@awsui/components-react/form-field";
 import Input from "@awsui/components-react/input";
-import Select, { SelectProps } from "@awsui/components-react/select";
+import Select from "@awsui/components-react/select";
 import Container from "@awsui/components-react/container";
 import Header from "@awsui/components-react/header";
 import SpaceBetween from "@awsui/components-react/space-between";
@@ -10,7 +10,7 @@ import Button from "@awsui/components-react/button";
 import ProgressBar from "@awsui/components-react/progress-bar";
 import StatusIndicator from "@awsui/components-react/status-indicator";
 import { SUPPORT_LANGUAGES, DEFAULT_SOURCE_LANGUAGE, DEFAULT_TARGET_LANGUAGE, SUPPORT_FILETYPES } from "../../assets/config";
-import { createTranslationJob, listAlbums, uploadFile } from "../../utils/s3utils";
+import { createTranslationJob, uploadFile } from "../../utils/s3utils";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@awsui/components-react";
 
@@ -135,7 +135,7 @@ const FileTranslationForm = () => {
                 "value": lang
               }))}
               selectedOption={targetLang}
-              onChange={(event) => setTargetLang(event.detail.selectedOption)}
+              onChange={(event) => setTargetLang(event?.detail?.selectedOption)}
               selectedAriaLabel="selected"
             />
           </FormField>
@@ -149,7 +149,7 @@ const FileTranslationForm = () => {
           </FormField>
 
           {!uploadId ? (
-            <SpaceBetween>
+            <SpaceBetween size={"s"}>
               <FormField errorText={!targetLang && "Please select a value"}>
                 <Button>
                     <label htmlFor="files" style={{cursor: "pointer", width: "100%", left: 0}}>
@@ -185,7 +185,7 @@ const FileTranslationForm = () => {
               </FormField>
             </SpaceBetween>
           ) : (
-            <SpaceBetween>
+            <SpaceBetween size={"s"}>
               <FormField label="S3 input path">
                 <Input disabled value={uploadId} />
               </FormField>

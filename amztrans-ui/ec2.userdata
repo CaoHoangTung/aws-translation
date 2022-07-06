@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo apt update -y
+sudo apt install -y apache2
+
+sudo apt install -y npm
+
+curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+sudo apt install nodejs
+
+git clone https://github.com/CaoHoangTung/aws-translation
+cd aws-translation/amztrans-ui
+npm install
+npm run build
+mv build/* /var/www/html/
