@@ -4,6 +4,8 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3Client, PutObjectCommand, ListObjectsCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { REGION, BUCKET_NAME, OUTPUT_BUCKET_NAME, IDENTITY_POOL_ID, APIGATEWAY_ENDPOINT } from "../assets/config";
 import axios from "axios";
+import { getLocalAccessToken } from "./auth";
+import { API } from "./api";
 
 // Initialize the Amazon Cognito credentials provider
 const s3 = new S3Client({
@@ -107,32 +109,13 @@ export const createTranslationJob = async (jobName:string, contentType: string, 
     }
   });
 
-  const config = {
-    method: "post",
-    url: `${APIGATEWAY_ENDPOINT}/jobs/create`,
-    headers: {
-      "Content-Type": "text/plain"
-    },
-    data : data
-  };
-
-  return axios(config)
+  return API.post(`/jobs/create`, data);
 }
 
 export const listTranslationJobs = async () => {
-  const config = {
-    method: "get",
-    url: `${APIGATEWAY_ENDPOINT}/jobs/list`,
-  };
-
-  return axios(config);
+  return API.get("/jobs/list");
 }
 
 export const describeTranslationJob = async (jobId: string) => {
-  const config = {
-    method: "get",
-    url: `${APIGATEWAY_ENDPOINT}/jobs/describe?jobId=${jobId}`,
-  };
-
-  return axios(config);
+  return API.get(`/jobs/describe?jobId=${jobId}`);
 }

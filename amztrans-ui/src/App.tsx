@@ -8,6 +8,8 @@ import {
 import UploadPage from "./pages/upload";
 import TranslationJobs from "./pages/translation-jobs";
 import TranslationJob from "./pages/translation-job";
+import LoginPage from "./pages/login";
+import AuthPage from "./pages/auth";
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
       <Routes>
         <Route path="/">
           <Route index element={<UploadPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="auth" element={<AuthPage />} />
           <Route path="upload" element={<UploadPage />} />
           <Route path="result" >
             <Route index element={<TranslationJobs />} />

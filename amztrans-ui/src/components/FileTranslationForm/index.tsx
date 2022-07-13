@@ -105,7 +105,7 @@ const FileTranslationForm = () => {
                 setTranslationJobIsCreating(false);
               });
             }}>
-              Create translation job
+              Translate my files
             </Button>
         </SpaceBetween>
       }

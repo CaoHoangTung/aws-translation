@@ -106,9 +106,10 @@ export const SUPPORT_FILETYPES = [
 export const DEFAULT_TARGET_LANGUAGE = "vi";
 export const DEFAULT_SOURCE_LANGUAGE = "en";
 
-export const REGION = "us-east-1";
-export const BUCKET_NAME = "tungch-translationdemo-input-bucket";
-export const OUTPUT_BUCKET_NAME = "tungch-translationdemo-output-bucket";
-export const IDENTITY_POOL_ID = "us-east-1:e0da0899-0f64-422c-a318-702dbb21e199";
+export const REGION = import.meta.env.VITE_REGION || "us-east-1";
+export const BUCKET_NAME = import.meta.env.VITE_INPUT_BUCKET_NAME || "tungch-translationdemo-input-bucket";
+export const OUTPUT_BUCKET_NAME = import.meta.env.VITE_OUTPUT_BUCKET_NAME || "tungch-translationdemo-output-bucket";
+export const IDENTITY_POOL_ID = import.meta.env.VITE_IDENTITY_POOL_ID || "us-east-1:fdcbbbb0-2b84-43c1-af89-3111ece98582";
 
-export const APIGATEWAY_ENDPOINT = "https://ch6qlmeelb.execute-api.us-east-1.amazonaws.com/default";
+export const APIGATEWAY_ENDPOINT = import.meta.env.VITE_APIGATEWAY_ENDPOINT || "https://ch6qlmeelb.execute-api.us-east-1.amazonaws.com/default";
+export const COGNITO_USERPOOL_ENDPOINT = import.meta.env.VITE_COGNITO_USERPOOL_ENDPOINT || "https://amztrans-userpool.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=6b5c48s1d43g6jtjuloibahcsn&response_type=token&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000/auth";

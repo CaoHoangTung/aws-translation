@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppLayout from "@awsui/components-react/app-layout";
 import Header from "@awsui/components-react/header";
 import Container from "@awsui/components-react/container";
 import { Button, Link, SideNavigation } from "@awsui/components-react";
+import { useSearchParams } from "react-router-dom";
+import { getLocalAccessToken } from "../utils/auth";
+import LoginPage from "./login";
 
 const Tools = () => {
     return (
@@ -52,11 +55,15 @@ const Navigation = () => {
 
 const DefaultAppLayout = ({ content }) => {
     return (
-        <AppLayout
-            navigation={Navigation()}
-            tools={Tools()}
-            content={content}
-        />
+        !!getLocalAccessToken() ? (
+            <AppLayout
+                navigation={Navigation()}
+                tools={Tools()}
+                content={content}
+            />
+        ) : (
+            <LoginPage />
+        )
     )
 }
 export default DefaultAppLayout;
