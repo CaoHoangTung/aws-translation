@@ -23,9 +23,12 @@ class APIGatewayStack(NestedStack):
                 ],
                 allow_methods=["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"],
                 allow_credentials=True,
-                allow_origins=["http://localhost:3000"],
+                allow_origins=["*"],
             ),
-            deploy=True
+            deploy=True,
+            endpoint_configuration=apigateway.EndpointConfiguration(
+                types=[apigateway.EndpointType.REGIONAL]
+            )
         )
 
         apigw_authorizer = apigateway.CognitoUserPoolsAuthorizer(self, "TestAuthorizer",
@@ -68,5 +71,7 @@ class APIGatewayStack(NestedStack):
                 )
             ]
         )
-        
+
+        deployment = apigateway.Deployment(self, "Deployment", api=api)
+
         self.url = api.url

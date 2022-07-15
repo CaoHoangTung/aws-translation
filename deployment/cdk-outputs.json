@@ -1,0 +1,9 @@
+{
+  "amztrans-demo": {
+    "INPUTBUCKETNAME": "amztrans-demo-s3stacknested-amztransinput41e53db2-1v3vtxoihgmbi",
+    "APIGATEWAYENDPOINT": "https://a4ac0xqoq3.execute-api.ap-northeast-2.amazonaws.com/prod/",
+    "COGNITOUSERPOOLENDPOINT": "https://amztrans-domain.auth.ap-northeast-2.amazoncognito.com/oauth2/authorize?client_id=2fbdcq85642019s5baqj2k6h4a&response_type=token&scope=email+openid&redirect_uri=http://localhost:3000/auth",
+    "IDENTITYPOOLID": "ap-northeast-2:04fc9d89-bc72-4d8c-b200-60c6f4e05b20",
+    "OUTPUTBUCKETNAME": "amztrans-demo-s3stackneste-amztransoutputf9a36510-13e5f5idotgn3"
+  }
+}

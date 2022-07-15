@@ -6,6 +6,7 @@ import { clearLocalAccessToken } from "../../utils/auth";
 const LoginPage = () => {
     useEffect(() => {
         clearLocalAccessToken();
+        console.log("REDIRECTING TO", COGNITO_USERPOOL_ENDPOINT);
         window.location.replace(COGNITO_USERPOOL_ENDPOINT);
       }, [])
     

@@ -1,0 +1,6 @@
+VITE_COGNITO_USERPOOL_ENDPOINT=https://amztrans-domain.auth.ap-northeast-2.amazoncognito.com/oauth2/authorize?client_id=${Token[TOKEN.353]}&response_type=token&scope=email+openid&redirect_uri=http://localhost:3000/auth
+VITE_APIGATEWAY_ENDPOINT=https://${Token[TOKEN.388]}.execute-api.${Token[AWS.Region.6]}.${Token[AWS.URLSuffix.3]}/${Token[TOKEN.407]}/
+VITE_IDENTITY_POOL_ID=${Token[TOKEN.356]}
+VITE_INPUT_BUCKET_NAME=${Token[TOKEN.218]}
+VITE_OUTPUT_BUCKET_NAME=${Token[TOKEN.242]}
+VITE_REGION=ap-northeast-2

@@ -8,7 +8,7 @@ from .constant import *
 
 class CognitoStack(NestedStack):
 
-    def __init__(self, scope: Construct, s3_stack: NestedStack,  **kwargs) -> None:
+    def __init__(self, scope: Construct, s3_stack: NestedStack, statichost_stack: NestedStack, **kwargs) -> None:
         super().__init__(scope, "Cognito Stack", **kwargs)
 
         user_pool = cognito.CfnUserPool(self, "amztrans-user-pool",
@@ -33,7 +33,7 @@ class CognitoStack(NestedStack):
             allowed_o_auth_flows_user_pool_client=True,
             allowed_o_auth_flows=["implicit"],
             allowed_o_auth_scopes=["email", "openid"],
-            callback_ur_ls=["http://localhost:3000/auth"]
+            callback_ur_ls=[f"{statichost_stack.cloudfront_url}/auth"]
         )
         user_pool_client.add_property_override("RefreshTokenValidity", 1)
         user_pool_client.add_property_override("SupportedIdentityProviders", ["COGNITO"])
