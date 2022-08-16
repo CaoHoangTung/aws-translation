@@ -1,3 +1,5 @@
+import random
+import string
 from aws_cdk import (
     NestedStack,
     aws_cognito as cognito,
@@ -37,10 +39,13 @@ class CognitoStack(NestedStack):
         )
         user_pool_client.add_property_override("RefreshTokenValidity", 1)
         user_pool_client.add_property_override("SupportedIdentityProviders", ["COGNITO"])
+        
+        
+        random_element = ''.join(random.choices(string.ascii_lowercase+string.digits, k=10))
 
         cfn_user_pool_domain = cognito.CfnUserPoolDomain(self, "AmzTransCognitoDomain",
             user_pool_id=user_pool_id,
-            domain="amztrans-domain",
+            domain=f"amztrans-domain-{random_element}",
         )
         
         cfn_user_pool_user = cognito.CfnUserPoolUser(self, "DefaultUserPoolUser",

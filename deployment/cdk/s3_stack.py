@@ -14,22 +14,26 @@ class S3Stack(NestedStack):
         super().__init__(scope, "S3 stack", **kwargs)
 
         self.input_bucket = s3.Bucket(self, "amztrans-input", 
-            removal_policy=RemovalPolicy.DESTROY, 
-            auto_delete_objects=True,
-            lifecycle_rules=[self.ONEDAY_DELETION_LIFECYCLE_RULE],
+            removal_policy=RemovalPolicy.DESTROY,       # Delete the bucket when the stack is destroyed
+            auto_delete_objects=True,                   # Delete the objects when the stack is destroyed
+            lifecycle_rules=[
+                self.ONEDAY_DELETION_LIFECYCLE_RULE     # Lifecycle policy to delete object 1 day after upload
+            ],
             cors=[s3.CorsRule(
-                allowed_headers=["*"],
-                allowed_methods=[s3.HttpMethods.PUT],
-                allowed_origins=["*"],
-            )]
+                allowed_headers=["*"],                  # Allow all HTTP header
+                allowed_methods=[s3.HttpMethods.PUT],   # Only allow HTTP PUT method
+                allowed_origins=["*"],                  # Allow all origins. In production, this should not be *
+            )],
         )
         self.output_bucket = s3.Bucket(self, "amztrans-output", 
-            removal_policy=RemovalPolicy.DESTROY, 
-            auto_delete_objects=True,
-            lifecycle_rules=[self.ONEDAY_DELETION_LIFECYCLE_RULE],
+            removal_policy=RemovalPolicy.DESTROY,       # Delete the bucket when the stack is destroyed
+            auto_delete_objects=True,                   # Delete the objects when the stack is destroyed
+            lifecycle_rules=[
+                self.ONEDAY_DELETION_LIFECYCLE_RULE     # Lifecycle policy to delete object 1 day after upload
+            ],
             cors=[s3.CorsRule(
-                allowed_headers=["*"],
-                allowed_methods=[s3.HttpMethods.GET],
-                allowed_origins=["*"],
+                allowed_headers=["*"],                  # Allow all HTTP header
+                allowed_methods=[s3.HttpMethods.GET],   # Only allow HTTP GET method
+                allowed_origins=["*"],                  # Allow all origins. In production, this should not be *
             )]
         )

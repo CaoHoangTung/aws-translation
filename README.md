@@ -48,8 +48,16 @@ DEFAULT_EMAIL="[YOUR_EMAIL_ADDRESS]"
 
 #### Deploy on CloudFront + S3
 To deploy and run the app on Amazon CloudFront and S3, deploy the stack in production mode. This stack will create an additional stack with S3 and CloudFront.
+Modify the default region to ap-northeast-2 by running the following command
 ```
-cd deployment && cdk deploy
+export AWS_DEFAULT_REGION=ap-northeast-2
+```
+Any region with AWS Batch Translate service available is also acceptable.
+
+Deploy the stack
+```
+cd deployment
+cdk deploy
 ```
 
 The output will be as following
