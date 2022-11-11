@@ -22,11 +22,6 @@ In the `deployment` directory, install the required packages by running the foll
 pip install -r requirements.txt
 ```
 
-If you are running cdk for the first time, bootstrap the CDK resource by running
-```
-cdk bootstrap
-```
-
 ### Setup the React project
 In the `amztrans-ui` directory, install the required packages by running the following command
 ```
@@ -53,6 +48,11 @@ Modify the default region to ap-northeast-2 by running the following command
 export AWS_DEFAULT_REGION=ap-northeast-2
 ```
 Any region with AWS Batch Translate service available is also acceptable.
+
+If you are running cdk for the first time, bootstrap the CDK resource by running
+```
+cdk bootstrap
+```
 
 Deploy the stack
 ```
